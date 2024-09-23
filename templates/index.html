@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Color Splash</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container {
+            background-color: rgba(30, 30, 30, 0.5);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 500px;
+            height: 350px;
+            text-align: center;
+            animation: float 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+            transition: background-color 0.3s ease;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #bb427c;
+            transition: color 0.3s ease;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 20px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 30px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: calc(100% - 22px);
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            background-color: #bb427c;
+            margin-top: 20px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .login-container:hover .submit-button {
+            background-color: var(--dynamic-color, #bb427c); /* Default color if not set */
+        }
+
+        .login-container:hover h1 {
+            color: var(--dynamic-color, #bb427c); /* Default color if not set */
+        }
+
+        input[type="submit"]:hover {
+            background-color: var(--dynamic-color, #bb427c); /* Default color if not set */
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .toggle-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-switch input {
+            display: none;
+        }
+
+        .toggle-switch label {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 25px;
+        }
+
+        .toggle-switch label:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 34px;
+            background-color: #643232;
+            border-radius: 34px;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-switch label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.451);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch input:checked + label:before {
+            background-color: rgba(40, 128, 72, 0.489); /* Green when toggled on */
+        }
+
+        .toggle-switch input:checked + label:after {
+            transform: translateX(26px);
+        }
+
+        .toggle-switch span {
+            margin-left: 10px;
+            margin-top: 9px;
+            color: #c4c4c4;
+        }
+
+        .color-splash {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 60%;
+            pointer-events: none;
+            opacity: 0.7;
+            transition: transform 0.1s ease, opacity 0.6s ease;
+        }
+
+        .color-picker-container {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            z-index: 2;
+            cursor: pointer;
+            border-radius: 50px;
+            background-color: rgba(30, 30, 30, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            display: inline-block;
+        }
+
+        .color-picker-container .picker-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(30, 30, 30, 0.2);
+            color: #fff;
+            padding: 10px;
+            border-radius: 50px;
+        }
+
+        .color-picker {
+            display: none;
+            position: absolute;
+            bottom: 70px;
+            left: 10px;
+            background-color: rgba(30, 30, 30, 0.3);
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            flex-direction: column;
+            display: flex;
+            gap: 10px;
+        }
+
+        .color-picker div {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff;
+        }
+
+        .color1 { background-color: #d6286acd; }
+        .color2 { background-color: #59af68; }
+        .color3 { background-color: #59669e; }
+        .color4 { background-color: #ac963c; }
+        .color5 { background-color: #9d5db9; }
+        .color6 { background-color: #ed3030; }
+        .color7 { background-color: #c4448f; }
+        .color8 { background-color: #579791; }
+
+        .color1:hover { background-color: #954563cd; }
+        .color2:hover { background-color: #2a5033; }
+        .color3:hover { background-color: #313962; }
+        .color4:hover { background-color: #635a2a; }
+        .color5:hover { background-color: #593565; }
+        .color6:hover { background-color: #8c1e1e; }
+        .color7:hover { background-color: #702b58; }
+        .color8:hover { background-color: #30524b; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1 id="login-title">Login</h1>
+        <form>
+            <input type="text" placeholder="Username" required>
+            <input type="password" placeholder="Password" required>
+            <input type="submit" value="Log In" class="submit-button">
+        </form>
+    </div>
+
+    <!-- Color Picker Section -->
+    <div class="color-picker-container" onclick="toggleColorPicker()">
+        <div class="picker-btn">Colors</div>
+        <div class="color-picker">
+            <div class="color1" onclick="setSplashColor('#d6286acd')"></div>
+            <div class="color2" onclick="setSplashColor('#59af68')"></div>
+            <div class="color3" onclick="setSplashColor('#59669e')"></div>
+            <div class="color4" onclick="setSplashColor('#ac963c')"></div>
+            <div class="color5" onclick="setSplashColor('#9d5db9')"></div>
+            <div class="color6" onclick="setSplashColor('#ed3030')"></div>
+            <div class="color7" onclick="setSplashColor('#c4448f')"></div>
+            <div class="color8" onclick="setSplashColor('#579791')"></div>
+        </div>
+    </div>
+
+    <!-- Toggle Switch Section -->
+    <div class="toggle-switch">
+        <input type="checkbox" id="color-toggle" onchange="toggleColorEffects()">
+        <label for="color-toggle"></label>
+        <span id="switch-status">Play Mode</span>
+    </div>
+
+    <script>
+        let splashColor = ''; // Default splash color
+        let draggingActive = false; // Initial dragging state
+        let splashActive = false;  // Initial splash state
+
+        function toggleColorPicker() {
+            const colorPicker = document.querySelector('.color-picker');
+            colorPicker.style.display = colorPicker.style.display === 'none' || colorPicker.style.display === '' ? 'flex' : 'none';
+        }
+
+        function setSplashColor(color) {
+            splashColor = color;
+            document.documentElement.style.setProperty('--dynamic-color', color); // Set CSS variable
+        }
+
+        function toggleColorEffects() {
+            const toggleSwitch = document.getElementById('color-toggle');
+            const switchStatus = document.getElementById('switch-status');
+            
+            if (toggleSwitch.checked) {
+                // Enable splash effect
+                splashActive = true;
+                draggingActive = true;
+                switchStatus.textContent = 'On';
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mousedown', handleMouseDown);
+                document.addEventListener('mouseup', handleMouseUp);
+            } else {
+                // Disable splash effect
+                splashActive = false;
+                draggingActive = false;
+                switchStatus.textContent = 'Off';
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mousedown', handleMouseDown);
+                document.removeEventListener('mouseup', handleMouseUp);
+            }
+        }
+
+        function handleMouseMove(event) {
+            if (draggingActive) {
+                createColorSplash(event.clientX, event.clientY);
+            }
+        }
+
+        function handleMouseDown(event) {
+            if (draggingActive) {
+                createColorSplash(event.clientX, event.clientY);
+            }
+        }
+
+        function handleMouseUp(event) {
+            if (draggingActive) {
+                createColorSplash(event.clientX, event.clientY);
+            }
+        }
+
+        function createColorSplash(x, y) {
+            if (!splashActive) return; // If splash effect is not active, do nothing
+            const colorSplash = document.createElement('div');
+            colorSplash.className = 'color-splash';
+            colorSplash.style.backgroundColor = splashColor;
+            colorSplash.style.left = `${x - 50}px`; // Center the splash
+            colorSplash.style.top = `${y - 50}px`; // Center the splash
+            document.body.appendChild(colorSplash);
+            setTimeout(() => {
+                colorSplash.style.transform = 'scale(3)';
+                colorSplash.style.opacity = '0';
+            }, 0);
+            setTimeout(() => {
+                colorSplash.remove();
+            }, 500); // Duration to match the transform
+        }
+    </script>
+</body>
+</html>
